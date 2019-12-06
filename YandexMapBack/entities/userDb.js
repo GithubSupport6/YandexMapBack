@@ -1,6 +1,6 @@
 ﻿const sqlite3 = require('sqlite3').verbose();
 
-class Db {
+class userDb {
     constructor(file) {
         this.db = new sqlite3.Database(file);
         this.createTable()
@@ -15,19 +15,11 @@ class Db {
         return this.db.run(sql);
     }
 
-    selectByLogin(email, callback) {
+    selectByLogin(login, callback) {
         return this.db.get(
             `SELECT * FROM user WHERE login = ?`,
-            [email], function (err, row) {
+            [login], function (err, row) {
                 callback(err, row)
-            })
-    }
-
-    insertAdmin(user, callback) {
-        return this.db.run(
-            'INSERT INTO user (name,email,user_pass,is_admin) VALUES (?,?,?,?)',
-            user, (err) => {
-                callback(err)
             })
     }
 
@@ -39,11 +31,11 @@ class Db {
 
     insert(user, callback) {
         return this.db.run(
-            'INSERT INTO user (name,email,user_pass) VALUES (?,?,?)',
+            'INSERT INTO user (login,password) VALUES (?,?)',
             user, (err) => {
                 callback(err)
             })
     }
 }
 
-module.exports = Db 
+module.exports = userDb 
